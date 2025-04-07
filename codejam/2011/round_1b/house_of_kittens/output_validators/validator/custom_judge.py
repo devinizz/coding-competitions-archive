@@ -27,7 +27,7 @@ def _utils_Tokenize(text, case_sensitive=True):
   for char in text:
     if not (32 <= ord(char) <= 126) and char != '\n':
       return None
-  return [filter(None, row.split(' ')) for row in text.split('\n')
+  return [list(filter(None, row.split(' '))) for row in text.split('\n')
           if row.strip()]
 
 
@@ -223,7 +223,7 @@ def ParseCase(input_lines):
   edge_start = [int(w) - 1 for w in input_lines[1].split()]
   edge_end = [int(w) - 1 for w in input_lines[2].split()]
 
-  vertex_edges = [[] for i in xrange(num_points)]
+  vertex_edges = [[] for i in range(num_points)]
   for i, start in enumerate(edge_start):
     vertex_edges[start].append(edge_end[i])
   for vertex_edge_list in vertex_edges:
@@ -238,7 +238,7 @@ def ParseInputFile(input_file):
   input_lines = input_file.splitlines()
   num_cases = int(input_lines[0])
   result = []
-  for i in xrange(num_cases):
+  for i in range(num_cases):
     result.append(ParseCase(input_lines[3 * i + 1 : 3 * i + 4]))
   return result
 
@@ -258,7 +258,7 @@ def FindError(unused_self, input_file, unused_output_file, attempt):
   if len(tokenized_output) != 2 * num_cases:
     return 'Incorrect number of output file lines.'
 
-  for test_case in xrange(1, num_cases + 1):
+  for test_case in range(1, num_cases + 1):
     input_case = input_cases[test_case - 1]
     num_colors = min([len(face) for face in input_case.faces])
     line1, line2 = tokenized_output[2 * test_case - 2 : 2 * test_case]
@@ -294,9 +294,9 @@ if __name__ == "__main__":
   if sys.argv[1] == '-2':
     sys.exit(0)
   result = FindError(None,
-                     file(sys.argv[1]).read(),
-                     file(sys.argv[3]).read(),
-                     file(sys.argv[2]).read())
+                     open(sys.argv[1]).read(),
+                     open(sys.argv[3]).read(),
+                     open(sys.argv[2]).read())
   if result:
-    print >> sys.stderr, result
+    print(result, file=sys.stderr)
     sys.exit(1)

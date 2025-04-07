@@ -27,7 +27,7 @@ def _utils_Tokenize(text, case_sensitive=True):
   for char in text:
     if not (32 <= ord(char) <= 126) and char != '\n':
       return None
-  return [filter(None, row.split(' ')) for row in text.split('\n')
+  return [list(filter(None, row.split(' '))) for row in text.split('\n')
           if row.strip()]
 
 
@@ -205,7 +205,7 @@ def FindError(_, input_file, output_file, attempt):
   attempt = attempt.strip()
 
   # Extract non-whitespace lines of output and strip them, too.
-  attempt_lines = filter(None, map(lambda x: x.strip(), attempt.splitlines()))
+  attempt_lines = list(filter(None, map(lambda x: x.strip(), attempt.splitlines())))
 
   # What remains must have one line per test case.
   if len(attempt_lines) != num_cases:
@@ -257,9 +257,9 @@ if __name__ == "__main__":
   if sys.argv[1] == "-2":
     sys.exit(0)
   result = FindError(None,
-                     file(sys.argv[1]).read(),
-                     file(sys.argv[3]).read(),
-                     file(sys.argv[2]).read())
+                     open(sys.argv[1]).read(),
+                     open(sys.argv[3]).read(),
+                     open(sys.argv[2]).read())
   if result:
-    print >> sys.stderr, result
+    print(result, file=sys.stderr)
     sys.exit(1)
